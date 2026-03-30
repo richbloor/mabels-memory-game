@@ -1,0 +1,78 @@
+.card-scene {
+  width: 90px;
+  height: 110px;
+  perspective: 600px;
+  cursor: pointer;
+}
+
+.card-scene:hover .card-inner:not(.matched) {
+  transform: scale(1.05);
+}
+
+.card-scene:hover .card-inner.flipped:not(.matched) {
+  transform: rotateY(180deg) scale(1.05);
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease, opacity 0.5s ease 0.3s;
+  border-radius: 12px;
+}
+
+.card-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-inner.matched {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.card-back,
+.card-front {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.card-back {
+  background: linear-gradient(135deg, #d63384, #c2185b);
+  border: 3px solid #ad1457;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card-back-icon {
+  font-size: 2rem;
+  opacity: 0.7;
+}
+
+.card-front {
+  background: linear-gradient(135deg, #e53935, #c62828);
+  border: 3px solid #b71c1c;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: rotateY(180deg);
+  color: white;
+  gap: 6px;
+}
+
+.card-emoji {
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.card-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+}
