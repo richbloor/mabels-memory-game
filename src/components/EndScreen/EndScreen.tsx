@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { TimeStats, ScoreEntry } from '../../types';
 import { formatTime } from '../Timer/Timer';
-import { loadScores, saveScore } from '../../utils/storage';
+import { fetchScores, postScore } from '../../utils/api';
 import './EndScreen.css';
 
 interface EndScreenProps {
@@ -16,21 +16,41 @@ function displayTime(ms: number | null): string {
 }
 
 export function EndScreen({ finalMs, stats, onPlayAgain }: EndScreenProps) {
-  const [scores, setScores] = useState<ScoreEntry[]>(() => loadScores());
+  const [scores, setScores] = useState<ScoreEntry[]>([]);
+  const [scoresLoading, setScoresLoading] = useState(true);
   const [name, setName] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState(false);
   const [newScoreIdx, setNewScoreIdx] = useState(-1);
 
-  const qualifies = scores.length < 10 || finalMs < scores[scores.length - 1].timeMs;
+  useEffect(() => {
+    fetchScores()
+      .then(setScores)
+      .catch(() => {})
+      .finally(() => setScoresLoading(false));
+  }, []);
 
-  function handleSubmit(e: React.FormEvent) {
+  const qualifies =
+    !scoresLoading &&
+    (scores.length < 10 || finalMs < scores[scores.length - 1].timeMs);
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!name.trim()) return;
-    const updated = saveScore(finalMs, name);
-    const idx = updated.findIndex(s => s.name === name.trim() && s.timeMs === finalMs);
-    setScores(updated);
-    setNewScoreIdx(idx);
-    setSubmitted(true);
+    if (!name.trim() || saving) return;
+    setSaving(true);
+    setSaveError(false);
+    try {
+      const updated = await postScore(finalMs, name);
+      const idx = updated.findIndex(s => s.name === name.trim() && s.timeMs === finalMs);
+      setScores(updated);
+      setNewScoreIdx(idx);
+      setSubmitted(true);
+    } catch {
+      setSaveError(true);
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -71,16 +91,22 @@ export function EndScreen({ finalMs, stats, onPlayAgain }: EndScreenProps) {
                 onChange={e => setName(e.target.value)}
                 placeholder="Enter your name"
                 autoFocus
+                disabled={saving}
               />
-              <button className="score-save-btn" type="submit">Save</button>
+              <button className="score-save-btn" type="submit" disabled={saving}>
+                {saving ? '…' : 'Save'}
+              </button>
             </form>
+            {saveError && <p className="save-error">Couldn't save — try again?</p>}
             <button className="score-skip-btn" type="button" onClick={() => setSubmitted(true)}>
               Skip
             </button>
           </div>
         )}
 
-        {scores.length > 0 && (
+        {scoresLoading ? (
+          <div className="leaderboard-loading">Loading scores…</div>
+        ) : scores.length > 0 && (
           <div className="leaderboard">
             <div className="leaderboard-title">Top 10</div>
             <ol className="leaderboard-list">

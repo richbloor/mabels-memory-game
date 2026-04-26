@@ -1,0 +1,8 @@
+name = "mabels-memory-game"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "SCORES_DB"
+database_name = "mabels-scores"
+database_id = "placeholder-replace-with-your-d1-id"
