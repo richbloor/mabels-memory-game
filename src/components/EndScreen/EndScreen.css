@@ -185,6 +185,22 @@
   opacity: 1;
 }
 
+.score-save-btn:disabled,
+.score-name-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.score-save-btn:disabled {
+  transform: none;
+}
+
+.save-error {
+  font-size: 0.8rem;
+  color: #b71c1c;
+  margin: 0;
+}
+
 /* ── Leaderboard ─────────────────────────────────────── */
 
 .leaderboard {
