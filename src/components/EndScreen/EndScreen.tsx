@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { TimeStats, ScoreEntry } from '../../types';
+import type { TimeStats, ScoreEntry, Difficulty } from '../../types';
 import { formatTime } from '../Timer/Timer';
 import { fetchScores, postScore } from '../../utils/api';
 import './EndScreen.css';
@@ -7,6 +7,7 @@ import './EndScreen.css';
 interface EndScreenProps {
   finalMs: number;
   stats: TimeStats;
+  difficulty: Difficulty;
   onPlayAgain: () => void;
 }
 
@@ -15,7 +16,7 @@ function displayTime(ms: number | null): string {
   return formatTime(ms);
 }
 
-export function EndScreen({ finalMs, stats, onPlayAgain }: EndScreenProps) {
+export function EndScreen({ finalMs, stats, difficulty, onPlayAgain }: EndScreenProps) {
   const [scores, setScores] = useState<ScoreEntry[]>([]);
   const [scoresLoading, setScoresLoading] = useState(true);
   const [name, setName] = useState('');
@@ -25,11 +26,11 @@ export function EndScreen({ finalMs, stats, onPlayAgain }: EndScreenProps) {
   const [newScoreIdx, setNewScoreIdx] = useState(-1);
 
   useEffect(() => {
-    fetchScores()
+    fetchScores(difficulty)
       .then(setScores)
       .catch(() => {})
       .finally(() => setScoresLoading(false));
-  }, []);
+  }, [difficulty]);
 
   const qualifies =
     !scoresLoading &&
@@ -41,7 +42,7 @@ export function EndScreen({ finalMs, stats, onPlayAgain }: EndScreenProps) {
     setSaving(true);
     setSaveError(false);
     try {
-      const updated = await postScore(finalMs, name);
+      const updated = await postScore(finalMs, name, difficulty);
       const idx = updated.findIndex(s => s.name === name.trim() && s.timeMs === finalMs);
       setScores(updated);
       setNewScoreIdx(idx);
@@ -52,6 +53,8 @@ export function EndScreen({ finalMs, stats, onPlayAgain }: EndScreenProps) {
       setSaving(false);
     }
   }
+
+  const difficultyLabel = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
 
   return (
     <div className="end-overlay">
@@ -77,7 +80,7 @@ export function EndScreen({ finalMs, stats, onPlayAgain }: EndScreenProps) {
 
         {qualifies && !submitted && (
           <div className="score-entry">
-            <div className="score-entry-title">You made the top 10!</div>
+            <div className="score-entry-title">You made the {difficultyLabel} top 10!</div>
             <form className="score-entry-form" onSubmit={handleSubmit}>
               <input
                 className="score-name-input"
@@ -104,7 +107,7 @@ export function EndScreen({ finalMs, stats, onPlayAgain }: EndScreenProps) {
           <div className="leaderboard-loading">Loading scores…</div>
         ) : scores.length > 0 && (
           <div className="leaderboard">
-            <div className="leaderboard-title">Top 10</div>
+            <div className="leaderboard-title">{difficultyLabel} Top 10</div>
             <ol className="leaderboard-list">
               {scores.map((entry, i) => (
                 <li

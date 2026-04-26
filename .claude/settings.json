@@ -11,7 +11,19 @@
       "Bash(git push:*)",
       "Read(//Users/richardbloor/Code/**)",
       "Bash(git pull *)",
-      "Bash(git stash *)"
+      "Bash(git stash *)",
+      "Bash(git checkout *)",
+      "Bash(npm install *)",
+      "Bash(npx wrangler *)",
+      "WebFetch(domain:mabel-game.rbloor.dev)",
+      "Bash(npm run *)",
+      "Read(//Users/richardbloor/.wrangler/config/**)",
+      "Bash(curl -s \"https://api.cloudflare.com/client/v4/accounts/467f24ec339e5c499600f5605f66b20d/pages/projects\" -H \"Authorization: Bearer $\\(cat ~/.wrangler/config/default.toml)",
+      "Read(//Users/richardbloor/.config/.wrangler/config/**)",
+      "Read(//Users/richardbloor/**)",
+      "Read(//Users/richardbloor/Library/**)",
+      "WebFetch(domain:mabels-memory-game.coffees-skiffs-4b.workers.dev)",
+      "Bash(md5 /Users/richardbloor/Code/mabels-memory-game/dist/assets/index-tMj5Qzoi.js)"
     ],
     "additionalDirectories": [
       "/Users/richardbloor/Code"

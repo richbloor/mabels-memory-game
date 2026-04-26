@@ -10,7 +10,10 @@ interface ScoreRow {
   time_ms: number;
 }
 
-const TOP_10_SQL = `SELECT name, time_ms FROM scores ORDER BY time_ms ASC LIMIT 10`;
+type Difficulty = 'easy' | 'medium' | 'hard';
+const VALID_DIFFICULTIES: Difficulty[] = ['easy', 'medium', 'hard'];
+
+const TOP_10_SQL = `SELECT name, time_ms FROM scores WHERE difficulty = ? ORDER BY time_ms ASC LIMIT 10`;
 
 function scoresResponse(rows: ScoreRow[]): Response {
   return Response.json(rows.map(r => ({ name: r.name, timeMs: r.time_ms })));
@@ -22,7 +25,11 @@ export default {
 
     if (url.pathname === '/api/scores') {
       if (request.method === 'GET') {
-        const { results } = await env.SCORES_DB.prepare(TOP_10_SQL).all<ScoreRow>();
+        const difficulty = (url.searchParams.get('difficulty') ?? 'hard') as Difficulty;
+        if (!VALID_DIFFICULTIES.includes(difficulty)) {
+          return Response.json({ error: 'Invalid difficulty' }, { status: 400 });
+        }
+        const { results } = await env.SCORES_DB.prepare(TOP_10_SQL).bind(difficulty).all<ScoreRow>();
         return scoresResponse(results);
       }
 
@@ -34,7 +41,7 @@ export default {
           return Response.json({ error: 'Invalid JSON' }, { status: 400 });
         }
 
-        const { name, timeMs } = body as Record<string, unknown>;
+        const { name, timeMs, difficulty } = body as Record<string, unknown>;
 
         if (typeof name !== 'string' || !name.trim() || name.trim().length > 20) {
           return Response.json({ error: 'Invalid name' }, { status: 400 });
@@ -42,12 +49,15 @@ export default {
         if (typeof timeMs !== 'number' || timeMs <= 0 || !Number.isInteger(timeMs)) {
           return Response.json({ error: 'Invalid time' }, { status: 400 });
         }
+        if (typeof difficulty !== 'string' || !VALID_DIFFICULTIES.includes(difficulty as Difficulty)) {
+          return Response.json({ error: 'Invalid difficulty' }, { status: 400 });
+        }
 
-        await env.SCORES_DB.prepare('INSERT INTO scores (name, time_ms) VALUES (?, ?)')
-          .bind(name.trim(), timeMs)
+        await env.SCORES_DB.prepare('INSERT INTO scores (name, time_ms, difficulty) VALUES (?, ?, ?)')
+          .bind(name.trim(), timeMs, difficulty)
           .run();
 
-        const { results } = await env.SCORES_DB.prepare(TOP_10_SQL).all<ScoreRow>();
+        const { results } = await env.SCORES_DB.prepare(TOP_10_SQL).bind(difficulty).all<ScoreRow>();
         return scoresResponse(results);
       }
 

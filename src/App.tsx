@@ -209,6 +209,7 @@ export default function App() {
           <EndScreen
             finalMs={elapsedMs}
             stats={finalStats}
+            difficulty={difficulty}
             onPlayAgain={handlePlayAgain}
           />
         </>

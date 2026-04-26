@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS scores (
-  id       INTEGER PRIMARY KEY AUTOINCREMENT,
-  name     TEXT    NOT NULL,
-  time_ms  INTEGER NOT NULL,
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  name       TEXT    NOT NULL,
+  time_ms    INTEGER NOT NULL,
+  difficulty TEXT    NOT NULL DEFAULT 'hard',
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
