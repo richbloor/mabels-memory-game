@@ -1,5 +1,5 @@
-import { STORAGE_KEY } from '../constants';
-import type { TimeStats } from '../types';
+import { STORAGE_KEY, SCORES_KEY } from '../constants';
+import type { TimeStats, ScoreEntry } from '../types';
 
 export function loadStats(): TimeStats {
   try {
@@ -19,5 +19,24 @@ export function saveStats(currentMs: number): TimeStats {
     last:  currentMs,
   };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+  return updated;
+}
+
+export function loadScores(): ScoreEntry[] {
+  try {
+    const raw = localStorage.getItem(SCORES_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw) as ScoreEntry[];
+  } catch {
+    return [];
+  }
+}
+
+export function saveScore(timeMs: number, name: string): ScoreEntry[] {
+  const scores = loadScores();
+  const updated = [...scores, { name: name.trim(), timeMs }]
+    .sort((a, b) => a.timeMs - b.timeMs)
+    .slice(0, 10);
+  localStorage.setItem(SCORES_KEY, JSON.stringify(updated));
   return updated;
 }
