@@ -38,4 +38,6 @@ p {
 button {
   font-family: inherit;
   cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
 }
