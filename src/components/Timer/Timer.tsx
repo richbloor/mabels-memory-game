@@ -2,6 +2,7 @@ import './Timer.css';
 
 interface TimerProps {
   elapsedMs: number;
+  moves: number;
 }
 
 function formatTime(ms: number): string {
@@ -12,11 +13,18 @@ function formatTime(ms: number): string {
   return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${tenths}`;
 }
 
-export function Timer({ elapsedMs }: TimerProps) {
+export function Timer({ elapsedMs, moves }: TimerProps) {
   return (
     <div className="timer">
-      <span className="timer-label">Time</span>
-      <span className="timer-value">{formatTime(elapsedMs)}</span>
+      <div className="timer-stat">
+        <span className="timer-label">Time</span>
+        <span className="timer-value">{formatTime(elapsedMs)}</span>
+      </div>
+      <div className="timer-sep">·</div>
+      <div className="timer-stat">
+        <span className="timer-label">Moves</span>
+        <span className="timer-value">{moves}</span>
+      </div>
     </div>
   );
 }

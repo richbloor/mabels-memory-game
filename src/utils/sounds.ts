@@ -1,4 +1,14 @@
+import { MUTE_KEY } from '../constants';
+
 let ctx: AudioContext | null = null;
+let _muted: boolean = localStorage.getItem(MUTE_KEY) === 'true';
+
+export function isMuted(): boolean { return _muted; }
+
+export function setMuted(val: boolean): void {
+  _muted = val;
+  localStorage.setItem(MUTE_KEY, String(val));
+}
 
 function getCtx(): AudioContext {
   if (!ctx) ctx = new AudioContext();
@@ -6,6 +16,7 @@ function getCtx(): AudioContext {
 }
 
 function note(freq: number, startTime: number, duration: number, gain: number, type: OscillatorType = 'sine') {
+  if (_muted) return;
   const ac = getCtx();
   const osc = ac.createOscillator();
   const env = ac.createGain();

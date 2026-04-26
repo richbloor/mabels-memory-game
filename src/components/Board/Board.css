@@ -1,22 +1,23 @@
 .board {
   display: grid;
-  grid-template-columns: repeat(6, 90px);
   gap: 14px;
   justify-content: center;
   margin: 24px auto;
 }
 
+.board--easy   { grid-template-columns: repeat(4, 90px); }
+.board--medium { grid-template-columns: repeat(4, 90px); }
+.board--hard   { grid-template-columns: repeat(6, 90px); }
+
 @media (max-width: 619px) {
-  .board {
-    grid-template-columns: repeat(6, 70px);
-    gap: 10px;
-  }
+  .board { gap: 10px; }
+  .board--easy, .board--medium { grid-template-columns: repeat(4, 70px); }
+  .board--hard                 { grid-template-columns: repeat(6, 70px); }
 }
 
 @media (max-width: 480px) {
-  .board {
-    grid-template-columns: repeat(3, 80px);
-    gap: 10px;
-    margin: 16px auto;
-  }
+  .board { gap: 7px; margin: 10px auto 6px; }
+  .board--easy   { grid-template-columns: repeat(4, 60px); }
+  .board--medium { grid-template-columns: repeat(3, 64px); }
+  .board--hard   { grid-template-columns: repeat(3, 64px); }
 }

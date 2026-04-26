@@ -14,6 +14,19 @@ body {
   min-height: 100svh;
 }
 
+@media (max-width: 480px) {
+  html, body {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  #root {
+    height: 100dvh;
+    min-height: unset;
+    overflow: hidden;
+  }
+}
+
 h1, h2, h3 {
   margin: 0;
 }

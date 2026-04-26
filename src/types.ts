@@ -1,4 +1,5 @@
-export type GamePhase = 'idle' | 'playing' | 'checking' | 'won';
+export type GamePhase = 'setup' | 'preview' | 'idle' | 'playing' | 'checking' | 'won';
+export type Difficulty = 'easy' | 'medium' | 'hard';
 
 export interface CardData {
   id: number;

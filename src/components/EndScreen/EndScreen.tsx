@@ -57,7 +57,7 @@ export function EndScreen({ finalMs, stats, onPlayAgain }: EndScreenProps) {
     <div className="end-overlay">
       <div className="end-card">
         <div className="end-title">You did it!</div>
-        <div className="end-subtitle">Well done, Mabel!</div>
+        <div className="end-subtitle">{submitted && name.trim() ? `Well done, ${name.trim()}!` : 'Well done!'}</div>
 
         <div className="end-stats">
           <div className="stat-row stat-current">
@@ -68,10 +68,6 @@ export function EndScreen({ finalMs, stats, onPlayAgain }: EndScreenProps) {
           <div className="stat-row">
             <span className="stat-label">Best time</span>
             <span className="stat-value stat-best">{displayTime(stats.best)}</span>
-          </div>
-          <div className="stat-row">
-            <span className="stat-label">Slowest time</span>
-            <span className="stat-value stat-worst">{displayTime(stats.worst)}</span>
           </div>
           <div className="stat-row">
             <span className="stat-label">Last time</span>

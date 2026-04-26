@@ -6,7 +6,19 @@
   padding-bottom: 40px;
 }
 
-.hint {
+@media (max-width: 480px) {
+  .app {
+    height: 100dvh;
+    min-height: unset;
+    padding-bottom: 8px;
+    overflow: hidden;
+  }
+}
+
+/* ── Hint / preview text ─────────────────────────────── */
+
+.hint,
+.preview-hint {
   color: #880e4f;
   font-size: 0.9rem;
   font-weight: 600;
@@ -15,26 +27,92 @@
   animation: pulse 2s ease-in-out infinite;
 }
 
+.preview-hint {
+  font-size: 1.1rem;
+  opacity: 1;
+  animation: none;
+}
+
 @keyframes pulse {
   0%, 100% { opacity: 0.7; }
   50%       { opacity: 1; }
 }
 
-.highscores-btn {
-  margin-top: 12px;
-  background: none;
-  border: 2px solid #e91e63;
-  color: #e91e63;
-  border-radius: 50px;
-  padding: 8px 24px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  font-family: inherit;
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+/* ── Setup / difficulty screen ───────────────────────── */
+
+.setup-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
 }
 
-.highscores-btn:hover {
-  background: #e91e63;
-  color: white;
+.setup-prompt {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #880e4f;
+  opacity: 0.85;
+  margin: 0;
+}
+
+.difficulty-btns {
+  display: flex;
+  gap: 12px;
+}
+
+.difficulty-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: white;
+  border: 3px solid #f48fb1;
+  border-radius: 16px;
+  padding: 16px 24px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 2px 8px rgba(136, 14, 79, 0.1);
+}
+
+.difficulty-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(136, 14, 79, 0.2);
+}
+
+.difficulty-btn--easy:hover   { border-color: #66bb6a; }
+.difficulty-btn--medium:hover { border-color: #e91e63; }
+.difficulty-btn--hard:hover   { border-color: #ab47bc; }
+
+.difficulty-name {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #880e4f;
+}
+
+.difficulty-btn--easy   .difficulty-name { color: #388e3c; }
+.difficulty-btn--medium .difficulty-name { color: #c2185b; }
+.difficulty-btn--hard   .difficulty-name { color: #7b1fa2; }
+
+.difficulty-sub {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #c2185b;
+  opacity: 0.7;
+}
+
+@media (max-width: 480px) {
+  .setup-screen {
+    margin-top: 12px;
+    gap: 12px;
+  }
+
+  .difficulty-btn {
+    padding: 12px 16px;
+  }
+
+  .difficulty-name {
+    font-size: 0.9rem;
+  }
 }
