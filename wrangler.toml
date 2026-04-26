@@ -1,6 +1,9 @@
 name = "mabels-memory-game"
 compatibility_date = "2025-01-01"
-pages_build_output_dir = "dist"
+main = "src/worker.ts"
+
+[assets]
+directory = "./dist"
 
 [[d1_databases]]
 binding = "SCORES_DB"
