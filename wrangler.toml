@@ -5,4 +5,4 @@ pages_build_output_dir = "dist"
 [[d1_databases]]
 binding = "SCORES_DB"
 database_name = "mabels-scores"
-database_id = "placeholder-replace-with-your-d1-id"
+database_id = "7b5deaa2-75ce-47ab-883b-44afdbc43276"
