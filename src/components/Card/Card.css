@@ -76,3 +76,37 @@
   letter-spacing: 0.05em;
   opacity: 0.9;
 }
+
+@media (max-width: 619px) {
+  .card-scene {
+    width: 70px;
+    height: 86px;
+  }
+
+  .card-back-icon {
+    font-size: 1.6rem;
+  }
+
+  .card-emoji {
+    font-size: 1.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-scene {
+    width: 80px;
+    height: 98px;
+  }
+
+  .card-back-icon {
+    font-size: 1.8rem;
+  }
+
+  .card-emoji {
+    font-size: 2.1rem;
+  }
+
+  .card-label {
+    font-size: 0.6rem;
+  }
+}
