@@ -8,6 +8,7 @@ import { Header } from './components/Header/Header';
 import { Board } from './components/Board/Board';
 import { Timer } from './components/Timer/Timer';
 import { EndScreen } from './components/EndScreen/EndScreen';
+import { HighScoresModal } from './components/HighScoresModal/HighScoresModal';
 import './App.css';
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
   const [cards, setCards] = useState<CardData[]>(() => buildAndShuffleDeck());
   const [elapsedMs, setElapsedMs] = useState(0);
   const [finalStats, setFinalStats] = useState<TimeStats | null>(null);
+  const [showHighScores, setShowHighScores] = useState(false);
 
   // Refs for synchronous reads inside event handlers
   const phaseRef = useRef<GamePhase>('idle');
@@ -139,7 +141,12 @@ export default function App() {
         disabled={phase === 'checking' || phase === 'won'}
       />
       {phase === 'idle' && (
-        <p className="hint">Flip a card to start!</p>
+        <>
+          <p className="hint">Flip a card to start!</p>
+          <button className="highscores-btn" onClick={() => setShowHighScores(true)}>
+            High Scores
+          </button>
+        </>
       )}
       {phase === 'won' && finalStats && (
         <EndScreen
@@ -147,6 +154,9 @@ export default function App() {
           stats={finalStats}
           onPlayAgain={handlePlayAgain}
         />
+      )}
+      {showHighScores && (
+        <HighScoresModal onClose={() => setShowHighScores(false)} />
       )}
     </div>
   );

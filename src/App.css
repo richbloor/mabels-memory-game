@@ -19,3 +19,22 @@
   0%, 100% { opacity: 0.7; }
   50%       { opacity: 1; }
 }
+
+.highscores-btn {
+  margin-top: 12px;
+  background: none;
+  border: 2px solid #e91e63;
+  color: #e91e63;
+  border-radius: 50px;
+  padding: 8px 24px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.highscores-btn:hover {
+  background: #e91e63;
+  color: white;
+}
