@@ -4,6 +4,7 @@ import { DIFFICULTY_PAIRS } from './constants';
 import { buildAndShuffleDeck } from './utils/shuffle';
 import { saveStats } from './utils/storage';
 import { playFlip, playMatch, playNoMatch, playWin, isMuted, setMuted } from './utils/sounds';
+import { fetchScores } from './utils/api';
 import { Header } from './components/Header/Header';
 import { Board } from './components/Board/Board';
 import { Timer } from './components/Timer/Timer';
@@ -21,6 +22,7 @@ export default function App() {
   const [finalStats, setFinalStats] = useState<TimeStats | null>(null);
   const [showHighScores, setShowHighScores] = useState(false);
   const [muted, setMutedState] = useState(() => isMuted());
+  const [cutoffMs, setCutoffMs] = useState<number | null>(null);
 
   // Refs for synchronous reads inside event handlers
   const phaseRef = useRef<GamePhase>('setup');
@@ -60,7 +62,15 @@ export default function App() {
     setElapsedMs(0);
     setMoves(0);
     setFinalStats(null);
+    setCutoffMs(null);
     updatePhase('preview');
+
+    // Fetch top-10 cutoff for this difficulty so we can show the give-up button
+    fetchScores(d)
+      .then(scores => {
+        if (scores.length === 10) setCutoffMs(scores[9].timeMs);
+      })
+      .catch(() => {});
 
     setTimeout(() => {
       const faceDown = cardsRef.current.map(c => ({ ...c, isFlipped: false }));
@@ -148,6 +158,7 @@ export default function App() {
     setElapsedMs(0);
     setMoves(0);
     setFinalStats(null);
+    setCutoffMs(null);
   };
 
   const handleToggleMute = () => {
@@ -155,6 +166,11 @@ export default function App() {
     setMuted(next);
     setMutedState(next);
   };
+
+  const showGiveUp =
+    cutoffMs !== null &&
+    elapsedMs > cutoffMs &&
+    (phase === 'playing' || phase === 'checking');
 
   return (
     <div className="app">
@@ -199,6 +215,11 @@ export default function App() {
           />
           {phase === 'idle' && (
             <p className="hint">Flip a card to start!</p>
+          )}
+          {showGiveUp && (
+            <button className="give-up-btn" onClick={handlePlayAgain}>
+              Give Up
+            </button>
           )}
         </>
       )}
