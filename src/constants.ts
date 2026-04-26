@@ -12,3 +12,4 @@ export const FRUITS = [
 
 export const TOTAL_PAIRS = FRUITS.length;
 export const STORAGE_KEY = 'mabels_memory_stats';
+export const SCORES_KEY  = 'mabels_memory_scores';

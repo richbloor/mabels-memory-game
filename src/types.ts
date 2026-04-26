@@ -13,3 +13,8 @@ export interface TimeStats {
   worst: number | null;
   last: number | null;
 }
+
+export interface ScoreEntry {
+  name: string;
+  timeMs: number;
+}
